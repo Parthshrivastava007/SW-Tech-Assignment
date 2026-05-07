@@ -7,7 +7,7 @@ const Hero = () => {
   const origin = typeof window !== 'undefined' ? window.location.origin : '';
 
   return (
-    <section className="relative h-screen flex items-center pt-20 overflow-hidden isolate">
+    <section className="relative min-h-screen flex items-center pt-32 pb-16 md:py-0 overflow-hidden isolate">
       {/* YouTube Video Background */}
       <div className="absolute inset-0 z-0 pointer-events-none">
         <div className="absolute inset-0 bg-slate-950/70 z-10" /> {/* Overlay */}
@@ -37,7 +37,7 @@ const Hero = () => {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6, delay: 0.1 }}
-            className="text-5xl md:text-7xl font-display font-bold text-white mb-8 leading-tight"
+            className="text-4xl sm:text-5xl md:text-7xl font-display font-bold text-white mb-8 leading-tight"
           >
             Build Your Digital Empire With <span className="text-gradient">Precision</span>
           </motion.h1>

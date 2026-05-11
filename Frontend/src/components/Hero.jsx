@@ -48,7 +48,7 @@ const Hero = () => {
             transition={{ duration: 0.6, delay: 0.2 }}
             className="text-xl text-slate-400 mb-12 max-w-2xl mx-auto leading-relaxed"
           >
-            We eager combine cutting-edge technology with world-class design to create high-performing websites that scale your business and captivate your audience.
+            We combine cutting-edge technology with world-class design to create high-performing websites that scale your business and captivate your audience.
           </motion.p>
 
           <motion.div

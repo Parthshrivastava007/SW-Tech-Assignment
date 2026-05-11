@@ -6,9 +6,12 @@ import { FaXTwitter } from "react-icons/fa6";
 import { motion, AnimatePresence } from 'framer-motion';
 import logo from '../assets/logo.png';
 
+import { useAuth } from '../context/AuthContext';
+
 const Navbar = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
+  const { user, logout } = useAuth();
   const location = useLocation();
 
   useEffect(() => {
@@ -33,6 +36,7 @@ const Navbar = () => {
     { name: 'About Us', path: '/about' },
     { name: 'Services', path: '/services' },
     { name: 'Contact', path: '/contact' },
+    ...(user && user.role === 'admin' ? [{ name: 'Admin', path: '/admin' }] : []),
   ];
 
   const socialLinks = [
@@ -71,6 +75,25 @@ const Navbar = () => {
                 }`} />
               </Link>
             ))}
+            
+            {user ? (
+              <div className="flex items-center gap-4">
+                <span className="text-sm font-medium text-slate-300">Hi, {user.name.split(' ')[0]}</span>
+                <button 
+                  onClick={logout}
+                  className="px-4 py-2 bg-red-500/10 hover:bg-red-500/20 text-red-400 text-sm font-bold rounded-lg transition-colors border border-red-500/20"
+                >
+                  Logout
+                </button>
+              </div>
+            ) : (
+              <Link 
+                to="/login"
+                className="px-6 py-2 bg-primary-600 hover:bg-primary-700 text-white text-sm font-bold rounded-xl transition-all shadow-lg shadow-primary-500/25 hover:shadow-primary-500/40"
+              >
+                Sign In
+              </Link>
+            )}
           </div>
 
           {/* Mobile Toggle */}
@@ -124,9 +147,30 @@ const Navbar = () => {
                     </Link>
                   </motion.div>
                 ))}
+                
+                {user && (
+                   <motion.button
+                    initial={{ opacity: 0, x: 20 }}
+                    animate={{ opacity: 1, x: 0 }}
+                    transition={{ delay: 0.5 }}
+                    onClick={() => { logout(); setIsOpen(false); }}
+                    className="text-left text-3xl font-display font-bold text-red-400 hover:text-red-300"
+                  >
+                    Logout
+                  </motion.button>
+                )}
               </div>
 
               <div className="mt-auto space-y-8">
+                {!user && (
+                   <Link 
+                    to="/login"
+                    onClick={() => setIsOpen(false)}
+                    className="w-full inline-block text-center py-4 bg-primary-600 text-white font-bold rounded-2xl"
+                  >
+                    Sign In
+                  </Link>
+                )}
                 <div className="h-px bg-white/10 w-full" />
                 <div>
                   <p className="text-slate-400 text-sm font-medium mb-6 uppercase tracking-widest">Connect With Us</p>

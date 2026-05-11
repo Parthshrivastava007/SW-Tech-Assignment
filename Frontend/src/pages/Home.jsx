@@ -1,9 +1,13 @@
 import { motion } from 'framer-motion';
-import { Monitor, Code, ShoppingCart, Search, Zap, Shield, Users, Trophy } from 'lucide-react';
+import { Monitor, Code, ShoppingCart, Search, Zap, Shield, Users, Trophy, ArrowRight } from 'lucide-react';
 import Hero from '../components/Hero';
 import { Link } from 'react-router-dom';
+import { useState } from 'react';
+import QuoteModal from '../components/QuoteModal';
 
 const Home = () => {
+  const [isModalOpen, setIsModalOpen] = useState(false);
+
   const services = [
     {
       title: 'Web Design',
@@ -161,9 +165,12 @@ const Home = () => {
             <div className="relative z-10 max-w-3xl mx-auto">
               <h2 className="text-4xl md:text-5xl font-display font-bold text-white mb-8">Ready to Start Your Project?</h2>
               <p className="text-primary-100 text-lg mb-10">Let's collaborate to build something extraordinary. Get in touch today for a free consultation.</p>
-              <Link to="/contact" className="inline-flex bg-white text-primary-600 hover:bg-slate-100 px-10 py-4 rounded-xl font-bold transition-all shadow-xl">
-                Get a Free Quote
-              </Link>
+              <button
+                onClick={() => setIsModalOpen(true)}
+                className="cursor-pointer inline-flex bg-white text-primary-600 hover:bg-slate-200 px-10 py-4 rounded-xl font-bold transition-all shadow-xl"
+              >
+                Get Free Quote
+              </button>
             </div>
             {/* Abstract Background Shapes */}
             <div className="absolute top-0 right-0 w-64 h-64 bg-white/10 blur-[80px] rounded-full -translate-y-1/2 translate-x-1/2" />
@@ -171,15 +178,10 @@ const Home = () => {
           </div>
         </div>
       </section>
+
+      <QuoteModal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)} />
     </div>
   );
 };
-
-// Internal Helper
-const ArrowRight = ({ size }) => (
-  <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-    <path d="M5 12h14m-7-7 7 7-7 7" />
-  </svg>
-);
 
 export default Home;

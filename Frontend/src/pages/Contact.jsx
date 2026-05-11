@@ -1,6 +1,8 @@
 import { useState } from 'react';
 import { motion } from 'framer-motion';
 import { Mail, Phone, MapPin, Send, CheckCircle } from 'lucide-react';
+import toast from 'react-hot-toast';
+import Loader from '../components/Loader';
 
 const Contact = () => {
   const [formData, setFormData] = useState({
@@ -13,6 +15,7 @@ const Contact = () => {
 
   const [errors, setErrors] = useState({});
   const [submitted, setSubmitted] = useState(false);
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   const validate = () => {
     let tempErrors = {};
@@ -30,13 +33,31 @@ const Contact = () => {
     return Object.keys(tempErrors).length === 0;
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     if (validate()) {
-      console.log('Form Submitted:', formData);
-      setSubmitted(true);
-      setTimeout(() => setSubmitted(false), 5000);
-      setFormData({ name: '', email: '', phone: '', subject: '', message: '' });
+      setIsSubmitting(true);
+      try {
+        const res = await fetch('/api/contact', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(formData)
+        });
+        
+        if (res.ok) {
+          setSubmitted(true);
+          toast.success('Message sent successfully!');
+          setTimeout(() => setSubmitted(false), 5000);
+          setFormData({ name: '', email: '', phone: '', subject: '', message: '' });
+        } else {
+          const data = await res.json();
+          toast.error(data.message || 'Something went wrong');
+        }
+      } catch (err) {
+        toast.error('Failed to send message. Please check your connection.');
+      } finally {
+        setIsSubmitting(false);
+      }
     }
   };
 
@@ -202,9 +223,14 @@ const Contact = () => {
                   </div>
                   <button
                     type="submit"
-                    className="w-full bg-primary-600 hover:bg-primary-500 text-white font-bold py-4 rounded-xl transition-all flex items-center justify-center gap-2 shadow-lg shadow-primary-600/20"
+                    disabled={isSubmitting}
+                    className="w-full bg-primary-600 hover:bg-primary-500 text-white font-bold py-4 rounded-xl transition-all flex items-center justify-center gap-2 shadow-lg shadow-primary-600/20 disabled:opacity-70"
                   >
-                    Send Message <Send size={20} />
+                    {isSubmitting ? <Loader size="sm" /> : (
+                      <>
+                        Send Message <Send size={20} />
+                      </>
+                    )}
                   </button>
                 </form>
               )}

@@ -2,8 +2,10 @@ import { Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { Mail, Phone, MapPin } from 'lucide-react';
 import { FaInstagram, FaWhatsapp, FaYoutube, FaLinkedin } from "react-icons/fa";
-import { FaXTwitter } from "react-icons/fa6"
+import { FaXTwitter } from "react-icons/fa6";
 import logo from '../assets/logo.png';
+import toast from 'react-hot-toast';
+import Loader from './Loader';
 
 const Footer = () => {
   const containerVariants = {
@@ -108,23 +110,13 @@ const Footer = () => {
           </ul>
         </motion.div>
 
-        {/* Contact Info */}
-        <motion.div variants={itemVariants}>
-          <h4 className="text-slate-900 dark:text-white font-bold mb-6">Contact Us</h4>
-          <ul className="space-y-4">
-            <li className="flex items-start gap-3 text-slate-600 dark:text-slate-400">
-              <MapPin size={20} className="text-primary-400 shrink-0" />
-              <span>D14, Pocket 14, Sector 8D, Rohini, New Delhi, Delhi, 110085</span>
-            </li>
-            <li className="flex items-center gap-3 text-slate-600 dark:text-slate-400">
-              <Phone size={20} className="text-primary-400 shrink-0" />
-              <span>+91 8933942662</span>
-            </li>
-            <li className="flex items-center gap-3 text-slate-600 dark:text-slate-400">
-              <Mail size={20} className="text-primary-400 shrink-0" />
-              <span>info@socialwavez.com</span>
-            </li>
-          </ul>
+        {/* Newsletter */}
+        <motion.div variants={itemVariants} className="lg:col-span-1">
+          <h4 className="text-slate-900 dark:text-white font-bold mb-6">Stay Updated</h4>
+          <p className="text-slate-600 dark:text-slate-400 text-sm mb-6 leading-relaxed">
+            Subscribe to our newsletter for the latest digital insights and tech news.
+          </p>
+          <NewsletterForm />
         </motion.div>
       </motion.div>
 
@@ -141,4 +133,57 @@ const Footer = () => {
   );
 };
 
+const NewsletterForm = () => {
+  const [email, setEmail] = useState('');
+  const [isSubmitting, setIsSubmitting] = useState(false);
+
+  const handleSubscribe = async (e) => {
+    e.preventDefault();
+    setIsSubmitting(true);
+    
+    try {
+      const res = await fetch('/api/newsletter/subscribe', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email })
+      });
+      
+      const data = await res.json();
+      if (res.ok) {
+        toast.success('Thank you for subscribing!');
+        setEmail('');
+      } else {
+        toast.error(data.message || 'Subscription failed.');
+      }
+    } catch (err) {
+      toast.error('Connection error.');
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
+
+  return (
+    <form onSubmit={handleSubscribe} className="space-y-3">
+      <div className="relative">
+        <input
+          type="email"
+          required
+          placeholder="Email address"
+          value={email}
+          onChange={(e) => setEmail(e.target.value)}
+          className="w-full bg-white dark:bg-slate-900 border border-slate-200 dark:border-white/10 rounded-xl px-4 py-3 text-slate-900 dark:text-white text-sm focus:outline-none focus:border-primary-500 transition-colors"
+        />
+        <button
+          type="submit"
+          disabled={isSubmitting}
+          className="absolute right-2 top-2 bottom-2 bg-primary-600 hover:bg-primary-700 text-white px-4 rounded-lg text-sm font-bold transition-colors disabled:opacity-70 flex items-center justify-center min-w-[60px]"
+        >
+          {isSubmitting ? <Loader size="sm" /> : 'Join'}
+        </button>
+      </div>
+    </form>
+  );
+};
+
+import { useState } from 'react';
 export default Footer;

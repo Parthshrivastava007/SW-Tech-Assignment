@@ -61,7 +61,7 @@ const Hero = () => {
               to="/contact"
               className="bg-primary-600 hover:bg-primary-500 text-white px-8 py-4 rounded-xl font-bold transition-all hover:scale-105 shadow-xl shadow-primary-500/25 flex items-center justify-center gap-2"
             >
-              Get a Free Quote <ArrowRight size={20} />
+              Contact Us <ArrowRight size={20} />
             </Link>
             <Link
               to="/services"

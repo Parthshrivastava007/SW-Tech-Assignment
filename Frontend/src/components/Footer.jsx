@@ -6,6 +6,7 @@ import { FaXTwitter } from "react-icons/fa6";
 import logo from '../assets/logo.png';
 import toast from 'react-hot-toast';
 import Loader from './Loader';
+import API_URL from '../api';
 
 const Footer = () => {
   const containerVariants = {
@@ -142,7 +143,7 @@ const NewsletterForm = () => {
     setIsSubmitting(true);
     
     try {
-      const res = await fetch('/api/newsletter/subscribe', {
+      const res = await fetch(`${API_URL}/newsletter/subscribe`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ email })

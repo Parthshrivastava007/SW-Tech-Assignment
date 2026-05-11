@@ -3,6 +3,7 @@ import { motion } from 'framer-motion';
 import { Mail, Phone, MapPin, Send, CheckCircle } from 'lucide-react';
 import toast from 'react-hot-toast';
 import Loader from '../components/Loader';
+import API_URL from '../api';
 
 const Contact = () => {
   const [formData, setFormData] = useState({
@@ -38,7 +39,7 @@ const Contact = () => {
     if (validate()) {
       setIsSubmitting(true);
       try {
-        const res = await fetch('/api/contact', {
+        const res = await fetch(`${API_URL}/contact`, {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify(formData)

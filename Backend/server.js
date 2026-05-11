@@ -10,7 +10,10 @@ connectDB();
 
 const app = express();
 
-app.use(cors());
+app.use(cors({
+  origin: true, // Allows any origin to connect
+  credentials: true, // Allows cookies to be sent
+}));
 app.use(express.json());
 app.use(cookieParser());
 

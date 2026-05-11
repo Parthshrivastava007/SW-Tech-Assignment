@@ -1,5 +1,6 @@
 import React, { createContext, useState, useEffect, useContext } from 'react';
 import toast from 'react-hot-toast';
+import API_URL from '../api';
 
 const AuthContext = createContext();
 
@@ -11,7 +12,9 @@ export const AuthProvider = ({ children }) => {
     // Check for user in localStorage or check cookie by calling profile
     const fetchUser = async () => {
       try {
-        const res = await fetch('/api/auth/profile');
+        const res = await fetch(`${API_URL}/auth/profile`, {
+          credentials: 'include'
+        });
         if (res.ok) {
           const data = await res.json();
           setUser(data);
@@ -26,10 +29,11 @@ export const AuthProvider = ({ children }) => {
   }, []);
 
   const login = async (email, password) => {
-    const res = await fetch('/api/auth/login', {
+    const res = await fetch(`${API_URL}/auth/login`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ email, password }),
+      credentials: 'include'
     });
     const data = await res.json();
     if (res.ok) {
@@ -42,10 +46,11 @@ export const AuthProvider = ({ children }) => {
   };
 
   const register = async (name, email, password) => {
-    const res = await fetch('/api/auth/register', {
+    const res = await fetch(`${API_URL}/auth/register`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ name, email, password }),
+      credentials: 'include'
     });
     const data = await res.json();
     if (res.ok) {
@@ -58,7 +63,10 @@ export const AuthProvider = ({ children }) => {
   };
 
   const logout = async () => {
-    await fetch('/api/auth/logout', { method: 'POST' });
+    await fetch(`${API_URL}/auth/logout`, { 
+      method: 'POST',
+      credentials: 'include'
+    });
     setUser(null);
     toast.success('Logged out');
   };

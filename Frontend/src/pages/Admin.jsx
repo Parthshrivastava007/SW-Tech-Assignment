@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useAuth } from '../context/AuthContext';
 import { motion } from 'framer-motion';
 import toast from 'react-hot-toast';
+import API_URL from '../api';
 
 const Admin = () => {
   const [contacts, setContacts] = useState([]);
@@ -14,9 +15,9 @@ const Admin = () => {
     const fetchData = async () => {
       try {
         const [contactsRes, usersRes, quotesRes] = await Promise.all([
-          fetch('/api/admin/contacts'),
-          fetch('/api/admin/users'),
-          fetch('/api/admin/quotes')
+          fetch(`${API_URL}/admin/contacts`, { credentials: 'include' }),
+          fetch(`${API_URL}/admin/users`, { credentials: 'include' }),
+          fetch(`${API_URL}/admin/quotes`, { credentials: 'include' })
         ]);
         
         if (contactsRes.ok) setContacts(await contactsRes.json());
@@ -31,7 +32,10 @@ const Admin = () => {
 
   const handleDeleteContact = async (id) => {
     if (window.confirm('Are you sure you want to delete this submission?')) {
-      const res = await fetch(`/api/admin/contacts/${id}`, { method: 'DELETE' });
+      const res = await fetch(`${API_URL}/admin/contacts/${id}`, { 
+        method: 'DELETE',
+        credentials: 'include'
+      });
       if (res.ok) {
         setContacts(contacts.filter(c => c._id !== id));
         toast.success('Submission deleted');

@@ -3,6 +3,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { X } from 'lucide-react';
 import toast from 'react-hot-toast';
 import Loader from './Loader';
+import API_URL from '../api';
 
 const QuoteModal = ({ isOpen, onClose }) => {
   const [formData, setFormData] = useState({
@@ -20,7 +21,7 @@ const QuoteModal = ({ isOpen, onClose }) => {
     setIsSubmitting(true);
     
     try {
-      const res = await fetch('/api/quote', {
+      const res = await fetch(`${API_URL}/quote`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(formData)

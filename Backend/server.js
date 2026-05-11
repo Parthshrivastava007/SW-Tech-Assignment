@@ -11,20 +11,20 @@ dotenv.config();
 
 const seedAdmin = async () => {
   try {
-    const adminExists = await User.findOne({ role: 'admin' });
+    const adminExists = await User.findOne({ role: "admin" });
     if (!adminExists) {
       const salt = await bcrypt.genSalt(10);
-      const hashedPassword = await bcrypt.hash('admin123', salt);
+      const hashedPassword = await bcrypt.hash("admin123", salt);
       await User.create({
-        name: 'Admin User',
-        email: 'admin@swtech.com',
+        name: "Admin User",
+        email: "admin@swtech.com",
         password: hashedPassword,
-        role: 'admin'
+        role: "admin",
       });
-      console.log('✅ Production Admin Seeded: admin@swtech.com / admin123');
+      console.log("✅ Production Admin Seeded: admin@swtech.com / admin123");
     }
   } catch (error) {
-    console.error('Seeding error:', error);
+    console.error("Seeding error:", error);
   }
 };
 
@@ -34,10 +34,12 @@ connectDB().then(() => {
 
 const app = express();
 
-app.use(cors({
-  origin: true, // Allows any origin to connect
-  credentials: true, // Allows cookies to be sent
-}));
+app.use(
+  cors({
+    origin: true, // Allows any origin to connect
+    credentials: true, // Allows cookies to be sent
+  }),
+);
 app.use(express.json());
 app.use(cookieParser());
 
